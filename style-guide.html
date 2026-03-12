@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System — Brief</title>
+  <style>
+    /* ── Fonts ────────────────────────────────────────────────────────────── */
+    @font-face { font-family:'Resistance'; src:url('fonts/Resistance.otf') format('opentype'); font-display:swap; }
+    @font-face { font-family:'At Textual'; src:url('fonts/AtTextual-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:'At Textual'; src:url('fonts/AtTextual-RegularItalic.woff2') format('woff2'); font-weight:400; font-style:italic; font-display:swap; }
+    @font-face { font-family:'At Textual'; src:url('fonts/AtTextual-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
+    @font-face { font-family:'At Textual'; src:url('fonts/AtTextual-Semibold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+    @font-face { font-family:'At Textual'; src:url('fonts/AtTextual-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+    @font-face { font-family:'At Textual'; src:url('fonts/AtTextual-Bolditalic.woff2') format('woff2'); font-weight:700; font-style:italic; font-display:swap; }
+
+    /* ── Tokens ───────────────────────────────────────────────────────────── */
+    :root {
+      --black:  #111;
+      --white:  #fff;
+      --gray-1: #f4f4f4;
+      --gray-2: #e8e8e8;
+      --gray-3: #aaa;
+      --gap:    1px;
+      --font:   'At Textual', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      --font-display: 'Resistance', serif;
+    }
+
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    html { font-family:var(--font); font-size:18px; color:var(--black); background:var(--gray-2); }
+
+    /* ── Layout ───────────────────────────────────────────────────────────── */
+    header {
+      display:flex; align-items:baseline; justify-content:space-between;
+      padding:1.1rem 1.5rem 1rem;
+      background:var(--black); color:var(--white);
+      position:sticky; top:0; z-index:20;
+    }
+    header h1 { font-family:var(--font-display); font-size:1.5rem; letter-spacing:0.2em; text-transform:uppercase; }
+    header span { font-family:var(--font-display); font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-3); }
+
+    .sg-body { display:flex; min-height:100vh; }
+
+    .sg-nav {
+      width:2rem; background:var(--black); position:sticky; top:3.4rem;
+      height:calc(100vh - 3.4rem); display:flex; flex-direction:column;
+      align-items:center; padding:1.5rem 0; gap:2rem; flex-shrink:0;
+    }
+    .sg-nav a {
+      font-family:var(--font-display); font-size:0.55rem; letter-spacing:0.15em;
+      text-transform:uppercase; color:var(--gray-3); text-decoration:none;
+      writing-mode:vertical-rl; transform:rotate(180deg); transition:color 0.15s;
+    }
+    .sg-nav a:hover { color:var(--white); }
+
+    .sg-content { flex:1; padding:0; }
+
+    /* ── Section scaffold ─────────────────────────────────────────────────── */
+    .sg-section {
+      border-bottom:1px solid var(--gray-2);
+      padding:3rem 2.5rem;
+      background:var(--white);
+    }
+    .sg-section:nth-child(even) { background:var(--gray-1); }
+
+    .sg-section-label {
+      font-family:var(--font-display); font-size:0.62rem; font-weight:700;
+      letter-spacing:0.18em; text-transform:uppercase; color:var(--gray-3);
+      margin-bottom:0.4rem;
+    }
+    .sg-section-title {
+      font-size:1.75rem; font-weight:700; line-height:1.2;
+      margin-bottom:0.5rem;
+    }
+    .sg-section-desc {
+      font-size:0.9rem; line-height:1.6; color:#444;
+      max-width:640px; margin-bottom:2.5rem;
+    }
+
+    .sg-row { display:flex; flex-wrap:wrap; gap:1px; margin-bottom:2rem; }
+    .sg-col { display:flex; flex-direction:column; gap:1rem; }
+
+    /* ── Color swatches ───────────────────────────────────────────────────── */
+    .swatches { display:flex; gap:1px; flex-wrap:wrap; }
+    .swatch {
+      flex:1; min-width:120px; display:flex; flex-direction:column;
+      overflow:hidden; border:1px solid var(--gray-2);
+    }
+    .swatch-block { height:5rem; }
+    .swatch-info { padding:0.6rem 0.7rem; background:var(--white); }
+    .swatch-token {
+      font-family:var(--font-display); font-size:0.58rem; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--gray-3); display:block;
+    }
+    .swatch-hex { font-size:0.82rem; font-weight:600; display:block; margin:0.2rem 0 0.15rem; }
+    .swatch-usage { font-size:0.72rem; color:var(--gray-3); }
+
+    /* ── Type specimens ───────────────────────────────────────────────────── */
+    .type-specimens { display:flex; flex-direction:column; gap:1px; }
+    .type-row {
+      display:flex; align-items:baseline; gap:2rem;
+      background:var(--white); padding:0.9rem 1rem;
+      border-left:3px solid var(--gray-2);
+    }
+    .type-row:hover { border-left-color:var(--black); }
+    .type-meta {
+      min-width:200px; font-family:var(--font-display); font-size:0.58rem;
+      letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-3);
+      flex-shrink:0;
+    }
+    .type-meta strong { display:block; color:var(--black); font-size:0.65rem; margin-bottom:0.2rem; }
+
+    /* ── Spacing scale ────────────────────────────────────────────────────── */
+    .spacing-rows { display:flex; flex-direction:column; gap:1px; }
+    .spacing-row {
+      display:flex; align-items:center; gap:1.5rem;
+      background:var(--white); padding:0.6rem 1rem;
+    }
+    .spacing-bar { background:var(--black); height:1rem; flex-shrink:0; }
+    .spacing-label {
+      font-family:var(--font-display); font-size:0.58rem;
+      letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-3); min-width:80px;
+    }
+    .spacing-desc { font-size:0.78rem; color:var(--gray-3); }
+
+    /* ── Component demos ──────────────────────────────────────────────────── */
+    .component-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:1px; }
+    .component-demo {
+      background:var(--white); padding:1.5rem;
+    }
+    .component-name {
+      font-family:var(--font-display); font-size:0.58rem; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--gray-3); margin-bottom:1rem;
+      padding-bottom:0.5rem; border-bottom:1px solid var(--gray-2);
+    }
+
+    /* ── Replicated Brief components ──────────────────────────────────────── */
+    .demo-header {
+      display:flex; align-items:baseline; justify-content:space-between;
+      padding:1.1rem 1.5rem 1rem; background:var(--black); color:var(--white);
+    }
+    .demo-header h2 { font-family:var(--font-display); font-size:1.5rem; letter-spacing:0.2em; text-transform:uppercase; }
+    .demo-header span { font-family:var(--font-display); font-size:1rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-3); }
+
+    .demo-col-head {
+      font-family:var(--font-display); background:var(--black); color:var(--white);
+      padding:0.3rem 0.9rem; font-size:0.65rem; font-weight:600;
+      letter-spacing:0.14em; text-transform:uppercase; display:inline-block;
+    }
+
+    .demo-cell {
+      background:var(--white); padding:0.75rem 0.9rem; min-height:7rem;
+      border:1px solid var(--gray-2);
+    }
+    .demo-cell.hover { background:var(--gray-1); }
+    .demo-cell.active { background:var(--gray-1); outline:2px solid var(--black); outline-offset:-2px; }
+    .demo-cell.empty { opacity:0.4; }
+    .cell-date { font-family:var(--font-display); font-size:0.6rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--gray-3); margin-bottom:0.35rem; }
+    .cell-title { font-size:0.95rem; line-height:1.35; font-weight:500; margin-bottom:0.5rem; }
+    .cell-summary { font-size:0.75rem; line-height:1.45; color:var(--gray-3); }
+
+    .demo-badge {
+      font-family:var(--font-display); font-size:0.75rem; font-weight:700;
+      letter-spacing:0.14em; text-transform:uppercase;
+      background:var(--black); color:var(--white); padding:0.2rem 0.5rem;
+      display:inline-block;
+    }
+
+    .demo-expand {
+      background:var(--gray-1); border-top:2px solid var(--black);
+      border-bottom:1px solid var(--gray-2); padding:1.5rem 1.25rem 2rem;
+    }
+    .demo-expand-header {
+      display:flex; align-items:baseline; gap:1rem; margin-bottom:1.25rem;
+    }
+    .demo-expand-date { font-family:var(--font-display); font-size:0.75rem; color:var(--gray-3); letter-spacing:0.05em; text-transform:uppercase; }
+    .demo-close { background:none; border:1px solid var(--gray-2); font-size:0.75rem; cursor:pointer; padding:0.25rem 0.6rem; color:var(--gray-3); margin-left:auto; }
+    .demo-story-title { font-size:1.25rem; font-weight:700; line-height:1.3; margin-bottom:0.45rem; }
+    .demo-story-body { font-size:1rem; line-height:1.6; color:#333; margin-bottom:0.65rem; }
+
+    .demo-sources { list-style:none; }
+    .demo-sources li { font-size:0.95rem; line-height:1.5; padding:0.15rem 0; border-top:1px solid var(--gray-2); }
+    .demo-sources li:last-child { border-bottom:1px solid var(--gray-2); }
+    .demo-sources .pub { font-weight:600; margin-right:0.35rem; }
+    .demo-sources a { color:var(--black); }
+    .demo-sources a:hover { text-decoration:underline; }
+
+    .demo-bonus {
+      padding:0.75rem 0.9rem; background:var(--white);
+      border-left:3px solid var(--black); font-size:0.82rem; line-height:1.5;
+    }
+    .demo-bonus-label {
+      font-family:var(--font-display); font-size:0.6rem; font-weight:700;
+      letter-spacing:0.12em; text-transform:uppercase; color:var(--gray-3);
+      display:block; margin-bottom:0.25rem;
+    }
+    .demo-bonus a { color:var(--black); }
+    .demo-bonus .pub-small { color:var(--gray-3); font-size:0.76rem; }
+
+    .demo-sidebar {
+      font-family:var(--font-display); background:var(--black); color:var(--white);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.8rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;
+      writing-mode:vertical-rl; transform:rotate(180deg);
+      width:2rem; height:6rem;
+    }
+
+    /* ── Cell states grid ─────────────────────────────────────────────────── */
+    .cell-states { display:grid; grid-template-columns:repeat(5, 1fr); gap:1px; }
+
+    /* ── Unread dot ───────────────────────────────────────────────────────── */
+    .demo-cell-wrap { position:relative; }
+    .demo-cell-wrap .demo-cell { position:relative; }
+    .demo-cell-wrap .demo-cell::after {
+      content:''; position:absolute; top:0.6rem; right:0.6rem;
+      width:6px; height:6px; border-radius:50%; background:var(--black);
+    }
+    .demo-cell-wrap.read .demo-cell::after { display:none; }
+    .demo-cell-wrap.empty .demo-cell::after { display:none; }
+
+    /* ── Pattern demos ────────────────────────────────────────────────────── */
+    .pattern-demo { border:1px solid var(--gray-2); overflow:hidden; }
+    .pattern-label {
+      font-family:var(--font-display); font-size:0.58rem; letter-spacing:0.12em;
+      text-transform:uppercase; color:var(--gray-3); margin-bottom:0.75rem;
+    }
+
+    .mini-grid {
+      display:grid; grid-template-columns:2rem repeat(4, 1fr); gap:1px; background:var(--gray-2);
+    }
+    .mini-sidebar { background:var(--black); height:4rem; }
+    .mini-head { background:var(--black); height:1.5rem; }
+    .mini-cell { background:var(--white); height:4rem; }
+    .mini-cell.active { background:var(--gray-1); outline:2px solid var(--black); outline-offset:-2px; }
+    .mini-expand { grid-column:1/-1; background:var(--gray-1); height:3rem; border-top:2px solid var(--black); }
+
+    /* ── App links ────────────────────────────────────────────────────────── */
+    .app-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:1px; }
+    .app-card {
+      background:var(--white); padding:1.5rem 1.25rem;
+      text-decoration:none; color:var(--black);
+      border-left:3px solid var(--gray-2);
+      display:block; transition:border-color 0.1s, background 0.1s;
+    }
+    .app-card:hover { background:var(--gray-1); border-left-color:var(--black); }
+    .app-card-name { font-family:var(--font-display); font-size:1rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.4rem; }
+    .app-card-type { font-family:var(--font-display); font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-3); margin-bottom:0.75rem; }
+    .app-card-desc { font-size:0.82rem; line-height:1.5; color:#444; }
+
+    /* ── Principles ───────────────────────────────────────────────────────── */
+    .principles { display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; }
+    .principle { background:var(--white); padding:1.5rem; }
+    .principle-num { font-family:var(--font-display); font-size:2rem; letter-spacing:0.1em; color:var(--gray-2); display:block; margin-bottom:0.5rem; }
+    .principle-title { font-size:1rem; font-weight:700; margin-bottom:0.5rem; }
+    .principle-body { font-size:0.82rem; line-height:1.6; color:#444; }
+
+    /* ── Scrollbar ────────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:var(--gray-2); }
+    ::-webkit-scrollbar-thumb { background:var(--gray-3); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Design System</h1>
+  <span>Brief / Screamer News</span>
+</header>
+
+<div class="sg-body">
+
+  <nav class="sg-nav">
+    <a href="#philosophy">Philosophy</a>
+    <a href="#color">Color</a>
+    <a href="#type">Type</a>
+    <a href="#spacing">Spacing</a>
+    <a href="#components">Components</a>
+    <a href="#patterns">Patterns</a>
+    <a href="#apps">Apps</a>
+  </nav>
+
+  <main class="sg-content">
+
+    <!-- PHILOSOPHY -->
+    <section class="sg-section" id="philosophy">
+      <div class="sg-section-label">001</div>
+      <h2 class="sg-section-title">Design Philosophy</h2>
+      <p class="sg-section-desc">A disciplined, type-driven system built around readability, grid structure, and a minimal monochromatic palette. Every element earns its place.</p>
+      <div class="principles">
+        <div class="principle">
+          <span class="principle-num">01</span>
+          <div class="principle-title">Type-Driven Hierarchy</div>
+          <p class="principle-body">Two typefaces do all the work. Resistance handles display, labels, and timestamps with authority. At Textual carries the reading experience. Size, weight, and letter-spacing create hierarchy without color.</p>
+        </div>
+        <div class="principle">
+          <span class="principle-num">02</span>
+          <div class="principle-title">Grid as Structure</div>
+          <p class="principle-body">CSS Grid with 1px gaps creates the visual skeleton. The gap color is the page background — a single design choice that unifies every layout. Columns, rows, and sidebars all emerge from this one pattern.</p>
+        </div>
+        <div class="principle">
+          <span class="principle-num">03</span>
+          <div class="principle-title">Black, White, Gray</div>
+          <p class="principle-body">Five colors. No accent, no gradient, no shadow. High contrast for legibility, gray for depth and hierarchy. If a new app needs a color, it should be used sparingly and with intention.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COLOR -->
+    <section class="sg-section" id="color">
+      <div class="sg-section-label">002</div>
+      <h2 class="sg-section-title">Color System</h2>
+      <p class="sg-section-desc">Five tokens. Black and white anchor the contrast. Three grays carry the mid-range — backgrounds, borders, and secondary text. Semantic intent matters more than the values.</p>
+      <div class="swatches">
+        <div class="swatch">
+          <div class="swatch-block" style="background:#111;"></div>
+          <div class="swatch-info">
+            <span class="swatch-token">--black</span>
+            <span class="swatch-hex">#111111</span>
+            <span class="swatch-usage">Headers, body text, active outlines, badges, borders</span>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#fff; border:1px solid #e8e8e8;"></div>
+          <div class="swatch-info">
+            <span class="swatch-token">--white</span>
+            <span class="swatch-hex">#FFFFFF</span>
+            <span class="swatch-usage">Cell backgrounds, card surfaces, text on dark backgrounds</span>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#f4f4f4;"></div>
+          <div class="swatch-info">
+            <span class="swatch-token">--gray-1</span>
+            <span class="swatch-hex">#F4F4F4</span>
+            <span class="swatch-usage">Hover states, expand panel background, alternate sections</span>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#e8e8e8;"></div>
+          <div class="swatch-info">
+            <span class="swatch-token">--gray-2</span>
+            <span class="swatch-hex">#E8E8E8</span>
+            <span class="swatch-usage">Grid gap, dividers, borders, page background</span>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#aaa;"></div>
+          <div class="swatch-info">
+            <span class="swatch-token">--gray-3</span>
+            <span class="swatch-hex">#AAAAAA</span>
+            <span class="swatch-usage">Secondary text, labels, metadata, timestamps, placeholders</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TYPOGRAPHY -->
+    <section class="sg-section" id="type">
+      <div class="sg-section-label">003</div>
+      <h2 class="sg-section-title">Typography</h2>
+      <p class="sg-section-desc">Two typefaces, deliberately paired. Resistance is the brand voice — display and label use only, always uppercase. At Textual is the reading face — use for anything longer than a few words.</p>
+
+      <div class="sg-section-label" style="margin-bottom:0.75rem;">Resistance — Display</div>
+      <div class="type-specimens" style="margin-bottom:2rem;">
+        <div class="type-row">
+          <div class="type-meta"><strong>Display / 2.5rem</strong>Headers, App Names</div>
+          <div style="font-family:'Resistance'; font-size:2.5rem; letter-spacing:0.2em; text-transform:uppercase;">Screamer News</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><strong>Large / 1.5rem</strong>Section Titles</div>
+          <div style="font-family:'Resistance'; font-size:1.5rem; letter-spacing:0.2em; text-transform:uppercase;">Screamer News</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><strong>Medium / 1rem</strong>Dates, Sub-labels</div>
+          <div style="font-family:'Resistance'; font-size:1rem; letter-spacing:0.12em; text-transform:uppercase;">Tuesday, March 10 2026</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><strong>Badge / 0.75rem</strong>Category Labels</div>
+          <div style="font-family:'Resistance'; font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; background:#111; color:#fff; padding:0.2rem 0.5rem; display:inline-block;">Politics</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><strong>Micro / 0.6rem</strong>Cell Dates, Tags</div>
+          <div style="font-family:'Resistance'; font-size:0.6rem; letter-spacing:0.12em; text-transform:uppercase; color:#aaa;">Mon 10 Mar 2026</div>
+        </div>
+      </div>
+
+      <div class="sg-section-label" style="margin-bottom:0.75rem;">At Textual — Body</div>
+      <div class="type-specimens" style="margin-bottom:2rem;">
+        <div class="type-row">
+          <div class="type-meta"><strong>Bold 700 / 1.25rem</strong>Story Titles</div>
+          <div style="font-size:1.25rem; font-weight:700; line-height:1.3;">Senate moves to expand AI oversight amid growing industry pressure</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><strong>Semibold 600 / 1rem</strong>Source Names</div>
+          <div style="font-size:1rem; font-weight:600;">The New York Times</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><strong>Medium 500 / 0.95rem</strong>Cell Titles</div>
+          <div style="font-size:0.95rem; font-weight:500; line-height:1.35;">AI regulation enters decisive phase as Senate votes near</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><strong>Regular 400 / 1rem</strong>Body Text</div>
+          <div style="font-size:1rem; line-height:1.6; max-width:500px;">The Senate Intelligence Committee approved a sweeping AI oversight bill on Thursday, setting up a floor vote as early as next week. Proponents argue the measure would establish clear liability standards without stifling innovation.</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><strong>Italic 400 / 1rem</strong>Asides</div>
+          <div style="font-size:1rem; font-style:italic; line-height:1.6; color:#444;">See also: the 2023 EU AI Act as a comparison model.</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta"><strong>Regular 400 / 0.75rem</strong>Cell Summaries</div>
+          <div style="font-size:0.75rem; line-height:1.45; color:#aaa;">Three senators crossed party lines in Thursday's committee vote, suggesting the bill could achieve rare bipartisan support on the full floor.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPACING -->
+    <section class="sg-section" id="spacing">
+      <div class="sg-section-label">004</div>
+      <h2 class="sg-section-title">Spacing &amp; Scale</h2>
+      <p class="sg-section-desc">Based on an 18px root. All spacing in rem. The 1px grid gap is a design signature — keep it. Content padding uses the 0.75–1.5rem range. Sections breathe at 1.5–2rem.</p>
+      <div class="spacing-rows">
+        <div class="spacing-row"><div class="spacing-bar" style="width:1px;"></div><div class="spacing-label">1px / --gap</div><div class="spacing-desc">Grid gaps. The defining detail of every layout.</div></div>
+        <div class="spacing-row"><div class="spacing-bar" style="width:calc(0.25rem * 16);"></div><div class="spacing-label">0.25rem</div><div class="spacing-desc">Button padding, micro-spacing</div></div>
+        <div class="spacing-row"><div class="spacing-bar" style="width:calc(0.45rem * 16);"></div><div class="spacing-label">0.45rem</div><div class="spacing-desc">Sub-item margins, between badge and text</div></div>
+        <div class="spacing-row"><div class="spacing-bar" style="width:calc(0.75rem * 16);"></div><div class="spacing-label">0.75rem</div><div class="spacing-desc">Cell padding (vertical), tight component padding</div></div>
+        <div class="spacing-row"><div class="spacing-bar" style="width:calc(0.9rem * 16);"></div><div class="spacing-label">0.9rem</div><div class="spacing-desc">Cell padding (horizontal)</div></div>
+        <div class="spacing-row"><div class="spacing-bar" style="width:calc(1.25rem * 16);"></div><div class="spacing-label">1.25rem</div><div class="spacing-desc">Expand panel inner padding, section headers</div></div>
+        <div class="spacing-row"><div class="spacing-bar" style="width:calc(1.5rem * 16);"></div><div class="spacing-label">1.5rem</div><div class="spacing-desc">Outer layout padding, story spacing</div></div>
+        <div class="spacing-row"><div class="spacing-bar" style="width:calc(1.75rem * 16);"></div><div class="spacing-label">1.75rem</div><div class="spacing-desc">Story margin-bottom, generous section gaps</div></div>
+        <div class="spacing-row"><div class="spacing-bar" style="width:calc(2rem * 16);"></div><div class="spacing-label">2rem</div><div class="spacing-desc">Sidebar width, expand panel bottom padding</div></div>
+        <div class="spacing-row"><div class="spacing-bar" style="width:calc(3rem * 16);"></div><div class="spacing-label">3rem</div><div class="spacing-desc">Status/empty state padding</div></div>
+      </div>
+    </section>
+
+    <!-- COMPONENTS -->
+    <section class="sg-section" id="components">
+      <div class="sg-section-label">005</div>
+      <h2 class="sg-section-title">Components</h2>
+      <p class="sg-section-desc">Every component in the system. All share the same color tokens and type scales. Combine them freely — they're designed to work together.</p>
+
+      <div class="component-grid">
+
+        <!-- Header -->
+        <div class="component-demo" style="grid-column:1/-1; padding:0;">
+          <div class="component-name" style="padding:0.75rem 1rem 0.75rem; margin:0; background:var(--white);">Header — <code>header</code></div>
+          <div class="demo-header">
+            <h2>Screamer News</h2>
+            <span>Tuesday 10 Mar</span>
+          </div>
+        </div>
+
+        <!-- Column Header -->
+        <div class="component-demo">
+          <div class="component-name">Column Header — <code>.col-head</code></div>
+          <div style="display:flex; gap:1px; background:var(--gray-2);">
+            <div class="demo-col-head" style="flex:1;">Politics</div>
+            <div class="demo-col-head" style="flex:1;">Tech</div>
+            <div class="demo-col-head" style="flex:1;">Sports</div>
+            <div class="demo-col-head" style="flex:1;">Culture</div>
+          </div>
+          <p style="font-size:0.75rem; color:var(--gray-3); margin-top:0.75rem;">Resistance font, 0.65rem, 0.14em tracking. Black background, white text. Sticky below header.</p>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="component-demo">
+          <div class="component-name">Date Sidebar — <code>.date-sidebar</code></div>
+          <div style="display:flex; gap:1rem; align-items:flex-start;">
+            <div class="demo-sidebar">Mon 10</div>
+            <div class="demo-sidebar">Tue 11</div>
+            <div class="demo-sidebar">Wed 12</div>
+          </div>
+          <p style="font-size:0.75rem; color:var(--gray-3); margin-top:0.75rem;">Resistance font, 0.8rem, vertical text rotated 180°. Always 2rem wide.</p>
+        </div>
+
+        <!-- Badge -->
+        <div class="component-demo">
+          <div class="component-name">Badge / Label — <code>.cat-label</code></div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.75rem;">
+            <span class="demo-badge">Politics</span>
+            <span class="demo-badge">Tech</span>
+            <span class="demo-badge">Sports</span>
+            <span class="demo-badge">Culture</span>
+          </div>
+          <p style="font-size:0.75rem; color:var(--gray-3);">Resistance font, 0.75rem, bold, 0.14em tracking. Black + white. Use for category, status, or type labels.</p>
+        </div>
+
+        <!-- Cell States -->
+        <div class="component-demo" style="grid-column:1/-1;">
+          <div class="component-name">Cell States — <code>.cell</code></div>
+          <div class="cell-states">
+            <div>
+              <div style="font-family:'Resistance'; font-size:0.55rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-3); margin-bottom:0.5rem;">Default (Unread)</div>
+              <div class="demo-cell-wrap">
+                <div class="demo-cell">
+                  <div class="cell-date">Mon 10 Mar</div>
+                  <div class="cell-title">AI regulation enters decisive phase</div>
+                  <div class="cell-summary">Three senators crossed party lines in the committee vote, suggesting the bill could achieve rare bipartisan support.</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:'Resistance'; font-size:0.55rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-3); margin-bottom:0.5rem;">Hover</div>
+              <div class="demo-cell-wrap">
+                <div class="demo-cell hover">
+                  <div class="cell-date">Mon 10 Mar</div>
+                  <div class="cell-title">AI regulation enters decisive phase</div>
+                  <div class="cell-summary">Three senators crossed party lines in the committee vote, suggesting the bill could achieve rare bipartisan support.</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:'Resistance'; font-size:0.55rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-3); margin-bottom:0.5rem;">Active</div>
+              <div class="demo-cell-wrap">
+                <div class="demo-cell active">
+                  <div class="cell-date">Mon 10 Mar</div>
+                  <div class="cell-title">AI regulation enters decisive phase</div>
+                  <div class="cell-summary">Three senators crossed party lines in the committee vote, suggesting the bill could achieve rare bipartisan support.</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:'Resistance'; font-size:0.55rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-3); margin-bottom:0.5rem;">Read</div>
+              <div class="demo-cell-wrap read">
+                <div class="demo-cell" style="opacity:0.7;">
+                  <div class="cell-date" style="color:var(--gray-3);">Mon 10 Mar</div>
+                  <div class="cell-title" style="color:var(--gray-3);">AI regulation enters decisive phase</div>
+                  <div class="cell-summary" style="color:var(--gray-2);">Three senators crossed party lines in the committee vote, suggesting the bill could achieve rare bipartisan support.</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:'Resistance'; font-size:0.55rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray-3); margin-bottom:0.5rem;">Empty</div>
+              <div class="demo-cell-wrap empty">
+                <div class="demo-cell empty">
+                  <div class="cell-date">Tue 11 Mar</div>
+                  <div class="cell-title">No digest yet</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:0.75rem; color:var(--gray-3); margin-top:0.75rem;">White bg → gray-1 on hover → gray-1 + 2px black outline when active. Unread cells show a 6px black dot (top-right); dot disappears after reading. Read state: title and summary fade to gray. Min-height: 10rem desktop, 7rem mobile.</p>
+        </div>
+
+        <!-- Expand Panel -->
+        <div class="component-demo" style="grid-column:1/-1; padding:0;">
+          <div class="component-name" style="padding:0.75rem 1rem; margin:0; background:var(--white);">Expand Panel — <code>.expand-panel</code></div>
+          <div class="demo-expand">
+            <div class="demo-expand-header">
+              <span class="demo-badge">Tech</span>
+              <span class="demo-expand-date">Monday 10 March 2026</span>
+              <button class="demo-close">✕ Close</button>
+            </div>
+            <div style="max-width:800px;">
+              <div class="demo-story-title">OpenAI and Anthropic submit competing proposals to Senate AI committee</div>
+              <div class="demo-story-body">Both companies sent detailed policy memos outlining preferred liability frameworks, as lawmakers race to craft legislation before the summer recess. The proposals differ significantly on how to handle open-source models.</div>
+              <ul class="demo-sources">
+                <li><span class="pub">The Verge</span> <a href="#">OpenAI wants safe-harbor protections for model providers</a></li>
+                <li><span class="pub">Wired</span> <a href="#">Anthropic's proposal centers on third-party auditing</a></li>
+              </ul>
+            </div>
+          </div>
+          <p style="font-size:0.75rem; color:var(--gray-3); padding:0.75rem 1rem;">Gray-1 background, 2px black top border. Spans full grid width. Max content width 800px.</p>
+        </div>
+
+        <!-- Bonus Block -->
+        <div class="component-demo">
+          <div class="component-name">Bonus Block — <code>.bonus</code></div>
+          <div class="demo-bonus">
+            <span class="demo-bonus-label">Also Worth Reading</span>
+            <div><a href="#">The quiet consolidation happening in enterprise AI</a> <span class="pub-small">— Financial Times</span></div>
+          </div>
+          <p style="font-size:0.75rem; color:var(--gray-3); margin-top:0.75rem;">White card, 3px black left border. Used for secondary links and interstitial notes.</p>
+        </div>
+
+        <!-- Source List -->
+        <div class="component-demo">
+          <div class="component-name">Source List — <code>.story-sources</code></div>
+          <ul class="demo-sources">
+            <li><span class="pub">The Guardian</span> <a href="#">UK government backs mandatory AI watermarking</a></li>
+            <li><span class="pub">Reuters</span> <a href="#">Brussels to fast-track AI enforcement division</a></li>
+            <li><span class="pub">Politico</span> <a href="#">Senators signal rare bipartisan consensus on AI</a></li>
+          </ul>
+          <p style="font-size:0.75rem; color:var(--gray-3); margin-top:0.75rem;">No list bullets. 1px gray-2 dividers between items. Publication name semibold, link is black.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PATTERNS -->
+    <section class="sg-section" id="patterns">
+      <div class="sg-section-label">006</div>
+      <h2 class="sg-section-title">Layout Patterns</h2>
+      <p class="sg-section-desc">The grid is the foundation. The sidebar is always 2rem wide. Column headers and main headers are sticky. The expand panel always spans full width.</p>
+
+      <div style="margin-bottom:2rem;">
+        <div class="pattern-label">4-Column News Grid with Sidebar and Expand Panel</div>
+        <div class="pattern-demo">
+          <div style="background:var(--black); height:2rem; display:flex; align-items:center; padding:0 1rem;">
+            <span style="font-family:'Resistance'; font-size:0.7rem; color:var(--white); letter-spacing:0.15em; text-transform:uppercase;">App Name</span>
+          </div>
+          <div class="mini-grid">
+            <div class="mini-head" style=""></div>
+            <div class="mini-head"></div>
+            <div class="mini-head"></div>
+            <div class="mini-head"></div>
+            <div class="mini-head"></div>
+            <div class="mini-sidebar"></div>
+            <div class="mini-cell"></div>
+            <div class="mini-cell active"></div>
+            <div class="mini-cell"></div>
+            <div class="mini-cell"></div>
+            <div class="mini-expand"></div>
+            <div class="mini-sidebar"></div>
+            <div class="mini-cell"></div>
+            <div class="mini-cell"></div>
+            <div class="mini-cell"></div>
+            <div class="mini-cell"></div>
+          </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--gray-3); margin-top:0.5rem;"><code>grid-template-columns: 2rem repeat(4, 1fr)</code> — 1px gap. Sidebar spans row, expand panel spans 1/-1.</p>
+      </div>
+
+      <div>
+        <div class="pattern-label">Two-Panel Layout (Notes / Detail Views)</div>
+        <div class="pattern-demo">
+          <div style="background:var(--black); height:2rem;"></div>
+          <div style="display:grid; grid-template-columns:280px 1fr; gap:1px; background:var(--gray-2); height:8rem;">
+            <div style="background:var(--white); display:flex; flex-direction:column; gap:1px; padding:1px;">
+              <div style="background:var(--gray-1); height:2rem;"></div>
+              <div style="background:var(--white); height:2rem;"></div>
+              <div style="background:var(--white); height:2rem;"></div>
+            </div>
+            <div style="background:var(--white);"></div>
+          </div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--gray-3); margin-top:0.5rem;"><code>grid-template-columns: 280px 1fr</code> — used for Notes and detail-heavy apps.</p>
+      </div>
+    </section>
+
+    <!-- APPS -->
+    <section class="sg-section" id="apps">
+      <div class="sg-section-label">007</div>
+      <h2 class="sg-section-title">App Mockups</h2>
+      <p class="sg-section-desc">Three companion apps designed on this system. Each adapts the core grid pattern to a different use case while remaining visually unified.</p>
+      <div class="app-grid">
+        <a class="app-card" href="mockup-tasks.html">
+          <div class="app-card-name">Daily Driver</div>
+          <div class="app-card-type">Task Manager</div>
+          <p class="app-card-desc">Kanban board using the column/row grid. Projects as sidebar rows, task states as column headers. Click any task to expand details.</p>
+        </a>
+        <a class="app-card" href="mockup-notes.html">
+          <div class="app-card-name">Commonplace</div>
+          <div class="app-card-type">Notes &amp; Wiki</div>
+          <p class="app-card-desc">Two-panel notes app with [[wiki links]], interstitial callouts, and backlink tracking. Left list, right content.</p>
+        </a>
+        <a class="app-card" href="mockup-media.html">
+          <div class="app-card-name">Archive</div>
+          <div class="app-card-type">Media Tracker</div>
+          <p class="app-card-desc">Books, films, music, and games in the four-column grid. Status rows: Current, Done, Want, Dropped.</p>
+        </a>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>
