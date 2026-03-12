@@ -1,6 +1,6 @@
 module.exports = {
   siteTitle: 'Tumbling',
-  siteUrl: 'https://YOUR_USERNAME.github.io/tumbling', // TODO: update after GitHub Pages is configured
+  siteUrl: 'https://tumbling.humdrum.me',
   siteDescription: 'A tumblog powered by Are.na',
   blogChannel: 'tumbling-ffsii27ts18',
   // Add additional pages here. Each page pulls from a separate Are.na channel

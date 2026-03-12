@@ -498,6 +498,12 @@ async function build() {
   copyFile(path.join(SRC_DIR, 'client.js'), path.join(DOCS_DIR, 'client.js'));
   linkOrCopyFonts();
 
+  // Write CNAME so GitHub Pages keeps the custom domain after each deploy
+  if (config.siteUrl && !config.siteUrl.includes('github.io')) {
+    const hostname = new URL(config.siteUrl).hostname;
+    fs.writeFileSync(path.join(DOCS_DIR, 'CNAME'), hostname, 'utf-8');
+  }
+
   // Fetch blog blocks — newest first via API sort
   console.log(`Fetching blog channel: ${config.blogChannel}`);
   let blogBlocks = [];
