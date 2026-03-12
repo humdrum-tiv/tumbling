@@ -124,8 +124,21 @@ function faviconUrl(url) {
 
 function renderImage(block) {
   const img = block.image || {};
-  const displayUrl = (img.display && img.display.url) || (img.original && img.original.url) || '';
-  const originalUrl = (img.original && img.original.url) || displayUrl;
+  const src = block.source || {};
+  // v3: img.src (string), v2: img.display.url / img.original.url
+  // fallback to source.url (the original image URL the block was created from)
+  const displayUrl =
+    img.src ||
+    (img.display && img.display.url) ||
+    (img.large && img.large.url) ||
+    (img.original && img.original.url) ||
+    src.url ||
+    '';
+  const originalUrl =
+    (img.original && img.original.url) ||
+    img.src ||
+    src.url ||
+    displayUrl;
   const alt = esc(block.title || block.description || 'Image');
   const caption = block.description ? `<p class="entry-caption">${esc(block.description)}</p>` : '';
   const descExpand = block.description
