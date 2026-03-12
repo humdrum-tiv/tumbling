@@ -122,6 +122,15 @@ function faviconUrl(url) {
 // ── Block renderers ──────────────────────────────────────────────────────────
 // Each renderer returns { preview, expand, summary } HTML strings and { title, text }
 
+// Safely extract a plain string from any field value (v3 may return objects)
+function toStr(val) {
+  if (!val) return '';
+  if (typeof val === 'string') return val;
+  if (typeof val === 'object') return val.body || val.text || val.content || '';
+  return String(val);
+}
+
+
 function renderImage(block) {
   const img = block.image || {};
   const src = block.source || {};
@@ -139,11 +148,10 @@ function renderImage(block) {
     img.src ||
     src.url ||
     displayUrl;
-  const alt = esc(block.title || block.description || 'Image');
-  const caption = block.description ? `<p class="entry-caption">${esc(block.description)}</p>` : '';
-  const descExpand = block.description
-    ? `<p class="expand-description">${esc(block.description)}</p>`
-    : '';
+  const desc = toStr(block.description);
+  const alt = esc(block.title || desc || 'Image');
+  const caption = desc ? `<p class="entry-caption">${esc(desc)}</p>` : '';
+  const descExpand = desc ? `<p class="expand-description">${esc(desc)}</p>` : '';
 
   const preview = displayUrl
     ? `<div class="entry-image-wrap">
@@ -156,13 +164,13 @@ function renderImage(block) {
   return {
     preview,
     expand,
-    summary: block.title || block.description || 'Image',
+    summary: block.title || desc || 'Image',
     hasExpand: false, // in-place expansion handled client-side after natural height check
   };
 }
 
 function renderText(block) {
-  const raw = block.content || block.description || '';
+  const raw = toStr(block.content) || toStr(block.description);
   const titleHtml = block.title
     ? `<div class="entry-title">${esc(block.title)}</div>`
     : '';
