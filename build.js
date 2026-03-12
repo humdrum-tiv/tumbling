@@ -10,7 +10,7 @@ const config = require('./config');
 // ── Configuration ────────────────────────────────────────────────────────────
 
 const ARENA_TOKEN = process.env.ARENA_TOKEN;
-const ARENA_BASE = 'https://api.are.na/v2';
+const ARENA_BASE = 'https://api.are.na/v3';
 const DOCS_DIR = path.join(__dirname, 'docs');
 const SRC_DIR = path.join(__dirname, 'src');
 const FONTS_DIR = path.join(__dirname, 'fonts');
@@ -40,18 +40,19 @@ async function arenaFetch(path) {
   return res.json();
 }
 
-async function fetchAllBlocks(slug) {
+// sortOrder: 'created_at_desc' for blog (newest first), 'position_asc' for pages
+async function fetchAllBlocks(slug, sortOrder) {
   const blocks = [];
   let page = 1;
   const perPage = 100;
 
   while (true) {
     const data = await arenaFetch(
-      `/channels/${slug}/contents?per=${perPage}&page=${page}`
+      `/channels/${slug}/contents?per=${perPage}&page=${page}&sort=${sortOrder}`
     );
-    const contents = data.contents || [];
+    const contents = data.data || [];
     blocks.push(...contents);
-    if (contents.length < perPage) break;
+    if (!data.meta || !data.meta.has_more_pages) break;
     page++;
   }
   return blocks;
@@ -420,7 +421,7 @@ function blockRssItem(block) {
   const title = block.title || blockTypeLabel(type);
   const link = `${config.siteUrl}/index.html#block-${block.id}`;
   const pubDate = rssDate(block.created_at);
-  const guid = `https://api.are.na/v2/blocks/${block.id}`;
+  const guid = `https://api.are.na/v3/blocks/${block.id}`;
 
   const description = rendered.summary || '';
   const fullDesc = rendered.expand || rendered.preview || '';
@@ -497,18 +498,21 @@ async function build() {
   copyFile(path.join(SRC_DIR, 'client.js'), path.join(DOCS_DIR, 'client.js'));
   linkOrCopyFonts();
 
-  // Fetch blog blocks
+  // Write CNAME so GitHub Pages keeps the custom domain after each deploy
+  if (config.siteUrl && !config.siteUrl.includes('github.io')) {
+    const hostname = new URL(config.siteUrl).hostname;
+    fs.writeFileSync(path.join(DOCS_DIR, 'CNAME'), hostname, 'utf-8');
+  }
+
+  // Fetch blog blocks — newest first via API sort
   console.log(`Fetching blog channel: ${config.blogChannel}`);
   let blogBlocks = [];
   try {
-    blogBlocks = await fetchAllBlocks(config.blogChannel);
+    blogBlocks = await fetchAllBlocks(config.blogChannel, 'created_at_desc');
   } catch (err) {
     console.error('Failed to fetch blog channel:', err.message);
     process.exit(1);
   }
-
-  // Sort newest first for blog
-  blogBlocks.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   console.log(`  ${blogBlocks.length} blocks fetched`);
 
   // Build blog index
@@ -538,12 +542,12 @@ async function build() {
     console.log(`Fetching page channel: ${page.slug} (${page.name})`);
     let pageBlocks = [];
     try {
-      pageBlocks = await fetchAllBlocks(page.slug);
+      pageBlocks = await fetchAllBlocks(page.slug, 'position_asc');
     } catch (err) {
       console.error(`  Failed to fetch page channel ${page.slug}:`, err.message);
       continue;
     }
-    // Pages keep position order (as returned by Are.na)
+    // Pages keep manual position order (owner's arrangement in Are.na)
     console.log(`  ${pageBlocks.length} blocks fetched`);
 
     let pageBodyHtml;
