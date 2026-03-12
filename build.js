@@ -157,7 +157,7 @@ function renderImage(block) {
     preview,
     expand,
     summary: block.title || block.description || 'Image',
-    hasExpand: true, // always expandable — preview is capped, full image shows in panel
+    hasExpand: false, // in-place expansion handled client-side after natural height check
   };
 }
 
