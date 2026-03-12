@@ -165,7 +165,7 @@ function renderImage(block) {
     preview,
     expand,
     summary: block.title || desc || 'Image',
-    hasExpand: false, // in-place expansion handled client-side after natural height check
+    hasExpand: !!originalUrl,
   };
 }
 
@@ -315,7 +315,8 @@ function renderBlock(block) {
     case 'Image':      return renderImage(block);
     case 'Text':       return renderText(block);
     case 'Link':       return renderLink(block);
-    case 'Embed':      return renderEmbed(block);
+    case 'Embed':
+    case 'Media':      return renderEmbed(block);
     case 'Attachment': return renderAttachment(block);
     default:           return renderText(block);
   }
