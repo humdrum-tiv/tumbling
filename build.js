@@ -277,10 +277,10 @@ function renderAttachment(block) {
 }
 
 function getBlockType(block) {
-  // Are.na API may return 'class_name' (v2 convention) or 'class' (v3 JSON field)
-  const explicit = block.class_name || block['class'] || block.block_type_class;
+  // Are.na API v3 uses 'type'; v2 used 'class_name' or 'class'
+  const explicit = block.type || block.class_name || block['class'] || block.block_type_class;
   if (explicit) return explicit;
-  // Infer from presence of type-specific data fields
+  // Infer from presence of type-specific data fields as a last resort
   if (block.image && (block.image.display || block.image.original)) return 'Image';
   if (block.embed && block.embed.html) return 'Embed';
   if (block.attachment && block.attachment.url) return 'Attachment';
@@ -373,6 +373,7 @@ function navLinksHtml(activePage) {
       const isActive = activePage === slug;
       return `<a href="pages/${slug}.html"${isActive ? ' class="is-active"' : ''}>${esc(p.name)}</a>`;
     }),
+    `<a href="${activePage ? '../' : ''}rss.xml">RSS Feed</a>`,
   ];
   return links.join('\n    ');
 }
