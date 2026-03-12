@@ -276,8 +276,20 @@ function renderAttachment(block) {
   };
 }
 
+function getBlockType(block) {
+  // Are.na API may return 'class_name' (v2 convention) or 'class' (v3 JSON field)
+  const explicit = block.class_name || block['class'] || block.block_type_class;
+  if (explicit) return explicit;
+  // Infer from presence of type-specific data fields
+  if (block.image && (block.image.display || block.image.original)) return 'Image';
+  if (block.embed && block.embed.html) return 'Embed';
+  if (block.attachment && block.attachment.url) return 'Attachment';
+  if (block.source && block.source.url) return 'Link';
+  return 'Text';
+}
+
 function renderBlock(block) {
-  const type = block.class_name || 'Text';
+  const type = getBlockType(block);
   switch (type) {
     case 'Image':      return renderImage(block);
     case 'Text':       return renderText(block);
@@ -303,7 +315,7 @@ function blockTypeLabel(className) {
 }
 
 function entryHtml(block) {
-  const type = block.class_name || 'Text';
+  const type = getBlockType(block);
   const typeClass = `entry--${type.toLowerCase()}`;
   const date = formatDate(block.created_at);
   const dateLong = formatDateLong(block.created_at);
@@ -331,7 +343,7 @@ function entryHtml(block) {
 // ── Page block HTML ──────────────────────────────────────────────────────────
 
 function pageBlockHtml(block) {
-  const type = block.class_name || 'Text';
+  const type = getBlockType(block);
   const typeClass = `entry--${type.toLowerCase()}`;
   const date = formatDate(block.created_at);
   const dateLong = formatDateLong(block.created_at);
@@ -416,7 +428,7 @@ ${bodyContent}
 // ── RSS feed ─────────────────────────────────────────────────────────────────
 
 function blockRssItem(block) {
-  const type = block.class_name || 'Text';
+  const type = getBlockType(block);
   const rendered = renderBlock(block);
   const title = block.title || blockTypeLabel(type);
   const link = `${config.siteUrl}/index.html#block-${block.id}`;
