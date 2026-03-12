@@ -1,0 +1,13 @@
+{
+  "name": "tumbling",
+  "version": "1.0.0",
+  "description": "A tumblog powered by Are.na",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "marked": "^12.0.0",
+    "node-fetch": "^2.7.0"
+  }
+}
