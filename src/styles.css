@@ -188,6 +188,11 @@ html {
   transition: opacity 0.1s;
 }
 
+.entry--image.is-image-expanded .entry-image-preview {
+  max-height: none;
+  object-fit: unset;
+}
+
 .entry--image:hover .entry-image-preview { opacity: 0.9; }
 
 .entry--image .entry-caption {
@@ -400,6 +405,11 @@ html {
 }
 
 .entry.is-expanded .entry-more-hint { display: none; }
+
+.entry--image.is-image-expanded .entry-more-hint::before {
+  border-top: none;
+  border-bottom: 5px solid var(--gray-3);
+}
 
 /* ── Expand panel ────────────────────────────────────────────────────────── */
 .expand-panel {

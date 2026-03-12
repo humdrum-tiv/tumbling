@@ -115,6 +115,60 @@
     if (e.key === 'Escape') closePanel();
   });
 
+  // In-place image expansion (only when natural height exceeds preview cap)
+  var IMAGE_MAX_H = 420;
+
+  function initImageExpansion() {
+    document.querySelectorAll('.entry--image').forEach(function (entry) {
+      var img = entry.querySelector('.entry-image-preview');
+      var wrap = entry.querySelector('.entry-image-wrap');
+      if (!img || !wrap) return;
+
+      function setup() {
+        var containerW = wrap.offsetWidth || img.offsetWidth;
+        var naturalH = img.naturalHeight;
+        var naturalW = img.naturalWidth;
+        if (!naturalH || !naturalW || !containerW) return;
+
+        // How tall would the image render at full width?
+        var renderedH = (naturalH / naturalW) * containerW;
+        if (renderedH <= IMAGE_MAX_H) return; // fits — no expand needed
+
+        // Add the expand/collapse hint
+        var hintWrap = document.createElement('div');
+        hintWrap.className = 'entry-inner';
+        hintWrap.style.paddingTop = '0';
+        var hint = document.createElement('div');
+        hint.className = 'entry-more-hint';
+        hint.textContent = 'Expand';
+        hintWrap.appendChild(hint);
+        entry.appendChild(hintWrap);
+
+        entry.setAttribute('tabindex', '0');
+        entry.setAttribute('role', 'button');
+        entry.setAttribute('aria-expanded', 'false');
+
+        function toggle(e) {
+          if (e.target.closest('a')) return;
+          var expanded = entry.classList.toggle('is-image-expanded');
+          entry.setAttribute('aria-expanded', String(expanded));
+          hint.textContent = expanded ? 'Collapse' : 'Expand';
+        }
+
+        entry.addEventListener('click', toggle);
+        entry.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); }
+        });
+      }
+
+      if (img.complete && img.naturalHeight > 0) {
+        setup();
+      } else {
+        img.addEventListener('load', setup);
+      }
+    });
+  }
+
   // Handle favicon load errors gracefully
   function initFavicons() {
     var favicons = document.querySelectorAll('.link-favicon');
@@ -131,10 +185,12 @@
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
       initEntries();
+      initImageExpansion();
       initFavicons();
     });
   } else {
     initEntries();
+    initImageExpansion();
     initFavicons();
   }
 })();
