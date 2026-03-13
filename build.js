@@ -416,6 +416,9 @@ function htmlShell({ title, bodyContent, activePage, canonical }) {
   <meta name="description" content="${esc(config.siteDescription)}">
   <link rel="canonical" href="${esc(canonicalUrl)}">
   <link rel="alternate" type="application/rss+xml" title="${esc(config.siteTitle)}" href="${esc(config.siteUrl)}/rss.xml">
+  <link rel="icon" type="image/x-icon" href="${activePage ? '../' : ''}favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="${activePage ? '../' : ''}apple-touch-icon.png">
+  <link rel="manifest" href="${activePage ? '../' : ''}manifest.json">
   <link rel="stylesheet" href="${activePage ? '../' : ''}styles.css">
 </head>
 <body>
@@ -531,6 +534,11 @@ async function build() {
   // Copy static assets
   copyFile(path.join(SRC_DIR, 'styles.css'), path.join(DOCS_DIR, 'styles.css'));
   copyFile(path.join(SRC_DIR, 'client.js'), path.join(DOCS_DIR, 'client.js'));
+  copyFile(path.join(SRC_DIR, 'favicon.ico'), path.join(DOCS_DIR, 'favicon.ico'));
+  copyFile(path.join(SRC_DIR, 'apple-touch-icon.png'), path.join(DOCS_DIR, 'apple-touch-icon.png'));
+  copyFile(path.join(SRC_DIR, 'icon-192.png'), path.join(DOCS_DIR, 'icon-192.png'));
+  copyFile(path.join(SRC_DIR, 'icon-512.png'), path.join(DOCS_DIR, 'icon-512.png'));
+  copyFile(path.join(SRC_DIR, 'manifest.json'), path.join(DOCS_DIR, 'manifest.json'));
   linkOrCopyFonts();
 
   // Write CNAME so GitHub Pages keeps the custom domain after each deploy
