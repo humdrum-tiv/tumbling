@@ -132,7 +132,7 @@
 
         // How tall would the image render at full width?
         var renderedH = (naturalH / naturalW) * containerW;
-        if (renderedH <= IMAGE_MAX_H) return; // fits — no expand needed
+        if (renderedH <= IMAGE_MAX_H * 1.15) return; // fits within ~15% of cap — no expand needed
 
         // Add the expand/collapse hint
         var hintWrap = document.createElement('div');

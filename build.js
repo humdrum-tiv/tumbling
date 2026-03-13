@@ -126,7 +126,7 @@ function faviconUrl(url) {
 function toStr(val) {
   if (!val) return '';
   if (typeof val === 'string') return val;
-  if (typeof val === 'object') return val.body || val.text || val.content || '';
+  if (typeof val === 'object') return val.markdown || val.html || val.plain || val.body || val.text || val.content || '';
   return String(val);
 }
 
@@ -165,7 +165,7 @@ function renderImage(block) {
     preview,
     expand,
     summary: block.title || desc || 'Image',
-    hasExpand: !!originalUrl,
+    hasExpand: false, // in-place expansion handled client-side after natural height check
   };
 }
 
